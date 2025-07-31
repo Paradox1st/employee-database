@@ -21,6 +21,8 @@ int main(int argc, char *argv[]) {
   bool newfile = false;
 	int c;
 
+  int dbfd = -1;
+
   while ((c = getopt(argc, argv, "nf:h")) != -1) {
     switch (c) {
       case 'n':
@@ -31,10 +33,10 @@ int main(int argc, char *argv[]) {
         break;
       case 'h':
         print_usage(argv);
-        return 0;
+        break;
       case '?':
         fprintf(stderr, "Unknown option: %c\n", c);
-        return 1;
+        break;
       default:
         fprintf(stderr, "Unexpected error with option parsing.\n");
         return -1;
@@ -47,6 +49,21 @@ int main(int argc, char *argv[]) {
 
     return 0;
   }
+
+  if (newfile) {
+    dbfd = create_db_file(filepath);
+    if (dbfd == STATUS_ERROR) {
+      printf("Failed to create database file: %s\n", filepath);
+      return -1;
+    }
+  } else {
+    dbfd = open_db_file(filepath);
+    if (dbfd == STATUS_ERROR) {
+      printf("Failed to create database file: %s\n", filepath);
+      return -1;
+    }
+  }
+
 
   return 0;
 }
