@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <getopt.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "common.h"
 #include "file.h"
@@ -22,6 +23,7 @@ int main(int argc, char *argv[]) {
 	int c;
 
   int dbfd = -1;
+  struct dbheader_t *dbhdr = NULL;
 
   while ((c = getopt(argc, argv, "nf:h")) != -1) {
     switch (c) {
@@ -56,14 +58,27 @@ int main(int argc, char *argv[]) {
       printf("Failed to create database file: %s\n", filepath);
       return -1;
     }
+
+    if (create_db_header(dbfd, &dbhdr) == STATUS_ERROR) {
+      printf("Failed to create database header\n");
+      close(dbfd);
+      return -1;
+    }
   } else {
     dbfd = open_db_file(filepath);
     if (dbfd == STATUS_ERROR) {
       printf("Failed to create database file: %s\n", filepath);
       return -1;
     }
+
+    if (validate_db_header(dbfd, &dbhdr) == STATUS_ERROR) {
+      printf("Failed to validate database header\n");
+      close(dbfd);
+      return -1;
+    }
   }
 
+  output_file(dbfd, dbhdr);
 
   return 0;
 }
