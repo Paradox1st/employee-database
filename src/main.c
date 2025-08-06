@@ -78,7 +78,9 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  output_file(dbfd, dbhdr);
+  struct employee_t *employees = NULL;
+
+  output_file(dbfd, dbhdr, employees);
 
   return 0;
 }

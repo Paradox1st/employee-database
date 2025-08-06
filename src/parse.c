@@ -29,6 +29,8 @@ int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) 
     return STATUS_ERROR;
   }
 
+  int realcount = dbhdr->count;
+
   dbhdr->magic = htonl(dbhdr->magic);
   dbhdr->filesize = htonl(dbhdr->filesize);
   dbhdr->count = htons(dbhdr->count);
@@ -37,6 +39,11 @@ int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) 
   lseek(fd, 0, SEEK_SET);
 
   write(fd, dbhdr, sizeof(struct dbheader_t));
+
+  for(int i = 0; i < realcount; i++) {
+    employees[i].hours = htonl(employees[i].hours);
+    write(fd, &employees[i], sizeof(struct employee_t));
+  }
 
   return STATUS_SUCCESS;
 }	
