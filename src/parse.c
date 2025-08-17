@@ -11,18 +11,6 @@
 #include "common.h"
 #include "parse.h"
 
-void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
-
-}
-
-int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees, char *addstring) {
-
-}
-
-int read_employees(int fd, struct dbheader_t *dbhdr, struct employee_t **employeesOut) {
-
-}
-
 int output_file(int fd, struct dbheader_t *dbhdr, struct employee_t *employees) {
   if (fd < 0) {
     printf("Got a bad file descriptor from user\n");
@@ -102,7 +90,7 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
   *headerOut = dbhdr;
 }
 
-int create_db_header(int fd, struct dbheader_t **headerOut) {
+int create_db_header(struct dbheader_t **headerOut) {
 	// create a new header
   struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
   if(header == NULL) {
