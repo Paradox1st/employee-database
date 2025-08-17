@@ -91,6 +91,11 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 }
 
 int create_db_header(struct dbheader_t **headerOut) {
+  if(headerOut == NULL) {
+    printf("Got a null pointer from user\n");
+    return STATUS_ERROR;
+  }
+
 	// create a new header
   struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
   if(header == NULL) {
